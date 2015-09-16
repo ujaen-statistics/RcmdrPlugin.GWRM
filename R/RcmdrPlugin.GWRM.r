@@ -28,6 +28,7 @@
 #' @importFrom Rcmdr gettextRcmdr getDialog initializeDialog ActiveModel formulaFields ActiveDataSet modelFormula UpdateModelNumber tclVar tkframe ttkentry subsetBox variableComboBox Numeric tclvalue errorCondition gettextRcmdr trim.blanks is.valid.name checkReplace UpdateModelNumber closeDialog getSelection putDialog ActiveDataSet doItAndPrint activeModel tkfocus CommanderWindow OKCancelHelp buttonRcmdr tkgrid labelRcmdr getFrame tklabel dialogSuffix
 #' @import GWRM RcmdrMisc
 #' 
+#' @export
 
 generalizedWaringModel<-function () 
 {
@@ -155,6 +156,7 @@ generalizedWaringModel<-function ()
   dialogSuffix(focus = lhsEntry, preventDoubleClick = TRUE)
 }
 
+#' @export
 listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...) 
 {
   objects <- ls(envir = envir, ...)
@@ -164,6 +166,7 @@ listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...)
                                                                envir = envir))[1]))]
 }
 
+#' @export
 resetGW<- function () 
 {
   putRcmdr("reset.model", TRUE)
@@ -172,6 +175,7 @@ resetGW<- function ()
   generalizedWaringModel()
 }
 
+#' @export
 activeModelGW<- function(){
   if (is.null(ActiveModel())){
     return (FALSE)
@@ -182,6 +186,7 @@ activeModelGW<- function(){
 
 
 #' @importFrom Rcmdr tkdestroy
+#' @export
 showTable<-function(...){
   tkdestroy(getRcmdr("gwrmNewDataTable"))
   newDataTable<- tkframe(getRcmdr("gwrmNewDataFrame"))
@@ -211,6 +216,7 @@ showTable<-function(...){
   tkgrid(newDataTable, sticky="w")
 }
 
+#' @export
 extractNewData <-function(nrows,ncols,colNames){
   textCreateNewData<-"data.frame("
   for (col in 1:ncols){
@@ -248,6 +254,7 @@ extractNewData <-function(nrows,ncols,colNames){
 #' 
 #' @importFrom Rcmdr tkframe tkscale
 #' 
+#' @export
 gwrmPartVar <-function(){
   
   initializeDialog(title=gettextRcmdr("Variance Partition"))
@@ -325,6 +332,7 @@ gwrmPartVar <-function(){
 #' 
 #' @importFrom Rcmdr variableListBox
 #' 
+#' @export
 gwrmResiduals<-function(){
   
   typeSets <- c("pearson","deviance","response")
