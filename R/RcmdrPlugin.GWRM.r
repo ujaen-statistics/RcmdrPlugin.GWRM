@@ -1,4 +1,4 @@
-#Hook function .onAttach is called when attach package
+#Hook function .onAttach is called when attach package.
 #' @importFrom Rcmdr putRcmdr getRcmdr closeCommander Commander
 .onAttach <- function(libname, pkgname){
   if (!interactive()) return()
