@@ -3,7 +3,7 @@
 \name{generalizedWaringModel}
 \alias{generalizedWaringModel}
 \title{Generalized Waring Regression Model
-Using the selected data show a window asking for the GWRM parameters}
+}
 \usage{
 generalizedWaringModel()
 }
