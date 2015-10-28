@@ -366,17 +366,17 @@ gwrmResiduals<-function(){
   putRcmdr("gwrmColNames",colNames)
   ncols<-length(colNames)
   
-  newDataTable<- tkframe(newDataFrame)
-  putRcmdr("gwrmNewDataTable",newDataTable)
-  header<-"tklabel(newDataTable, text='')"
-  for (col in seq(length.out=ncols)) {
-    putRcmdr(colNames[col],c())
-    header <- paste(header, ", ", "tklabel(newDataTable, width='12', text=\'", 
-                    colNames[col], "\')", sep="")
-  }   
-  
-  tkgrid(newDataTable, sticky="w")
-  tkgrid(newDataFrame, sticky="w")
+#   newDataTable<- tkframe(newDataFrame)
+#   putRcmdr("gwrmNewDataTable",newDataTable)
+#   header<-"tklabel(newDataTable, text='')"
+#   for (col in seq(length.out=ncols)) {
+#     putRcmdr(colNames[col],c())
+#     header <- paste(header, ", ", "tklabel(newDataTable, width='12', text=\'", 
+#                     colNames[col], "\')", sep="")
+#   }   
+#   
+#   tkgrid(newDataTable, sticky="w")
+#   tkgrid(newDataFrame, sticky="w")
   
   onOK <- function(){
     if (is.null(ActiveModel())) {
@@ -423,7 +423,7 @@ gwrmResiduals<-function(){
     closeDialog()
   }
   
-  tkgrid(tklabel(top, text=gettextRcmdr("This procedure can \nlast several minutes"),fg="red"), columnspan=2, sticky="w")
+  tkgrid(tklabel(top, text=gettextRcmdr("This procedure can last several minutes"),fg="red"), columnspan=2, sticky="w")
   OKCancelHelp(helpSubject="gwrmPartVar")
   
   tkgrid(buttonsFrame, columnspan=2, sticky="w")
