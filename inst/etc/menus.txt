@@ -3,7 +3,10 @@
 
 # last modified: 29 July 2015 by Silverio Vilchez
 
-#   type    menu/item      operation/parent  label                              command/menu                activation    install?
+#remove
+
+
+#   type    menu/item      operation/parent  label   command/menu                activation    install?
 item    modelsGraphsMenu      command         "Simulated envelope of residuals (GWRM)..."         gwrmResiduals    "activeModelGW()"           ""
 item    modelsMenu      command         "Partition of variance (GWRM)..."         gwrmPartVar    "activeModelGW()"           ""
 item    statModelsMenu  command         "Generalized Waring model (GWRM)..."                generalizedWaringModel      "activeDataSetP()"          ""
