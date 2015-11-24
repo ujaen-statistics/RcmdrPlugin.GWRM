@@ -430,3 +430,79 @@ gwrmResiduals<-function(){
   #dialogSuffix(rows=7, columns=2)  
   dialogSuffix()
 }
+
+addObservationStatistics <- function () 
+{
+  .activeDataSet <- ActiveDataSet()
+  .activeModel <- ActiveModel()
+  if (is.null(.activeModel)) 
+    return()
+  
+  if (activeModelGW()){
+    addVariable <- function(name) {
+      variable <- paste(name, ".", .activeModel, sep = "")
+      if (is.element(variable, .variables)) {
+        ans <- checkReplace(variable)
+        if (tclvalue(ans) == "no") 
+          return()
+      }
+      paste(variable, " <- ", name, "(", .activeModel, ")", 
+            sep = "")
+    }
+    if (getRcmdr("modelWithSubset")) {
+      Message(message = gettextRcmdr("Observation statistics not available\nfor a model fit to a subset of the data."), 
+              type = "error")
+      tkfocus(CommanderWindow())
+      return()
+    }
+    defaults <- list(initial.fitted = 1, initial.residuals = 1, initial.obsNumbers = 1)
+    dialog.values <- getDialog("addObservationStatistics", defaults)
+    initializeDialog(title = gettextRcmdr("Add Observation Statistics to Data"))
+    .variables <- Variables()
+    obsNumberExists <- is.element("obsNumber", .variables)
+#     activate <- c(checkMethod("fitted", .activeModel, default = TRUE, 
+#                               reportError = FALSE), checkMethod("residuals", .activeModel, 
+#                                                                 default = TRUE, reportError = FALSE), checkMethod("rstudent", 
+#                                                                                                                   .activeModel, reportError = FALSE), checkMethod("hatvalues", 
+#                                                                                                                                                                   .activeModel, reportError = FALSE), checkMethod("cooks.distance", 
+#                                                                                                                                                                                                                   .activeModel, reportError = FALSE))
+    checkBoxes(frame = "selectFrame", boxes = c("fitted", "residuals", "obsNumbers"), 
+               labels = gettextRcmdr("Fitted values", "Residuals", "Observation indices"), 
+               initialValues = c(dialog.values$initial.fitted, dialog.values$initial.residuals, dialog.values$initial.obsNumbers))
+    command <- paste(.activeDataSet, "<- within(", .activeDataSet, ", {", sep = "")
+    onOK <- function() {
+      closeDialog()
+      if (tclvalue(fittedVariable) == 1) 
+        command <- paste(command, "\n  ", addVariable("fitted"), 
+                         sep = "")
+      if (tclvalue(residualsVariable) == 1) 
+        command <- paste(command, "\n  ", addVariable("residuals"), 
+                         sep = "")
+      obsNumbers <- tclvalue(obsNumbersVariable)
+      putDialog("addObservationStatistics", list(initial.fitted = tclvalue(fittedVariable), 
+                                                 initial.residuals = tclvalue(residualsVariable), 
+                                                 initial.obsNumbers = obsNumbers))
+      if (tclvalue(obsNumbersVariable) == 1) {
+        proceed <- if (obsNumberExists) 
+          tclvalue(checkReplace("obsNumber"))
+        else "yes"
+        if (proceed == "yes") {
+          command <- paste(command, "\n  obsNumber <- 1:nrow(", 
+                           .activeDataSet, ")", sep = "")
+        }
+      }
+      command <- paste(command, "\n})")
+      result <- doItAndPrint(command)
+      if (class(result) != "try-error") 
+        activeDataSet(.activeDataSet, flushModel = FALSE, 
+                      flushDialogMemory = FALSE)
+      tkfocus(CommanderWindow())
+    }
+    OKCancelHelp(helpSubject = "influence.measures", reset = "addObservationStatistics")
+    tkgrid(selectFrame, sticky = "w")
+    tkgrid(buttonsFrame, sticky = "w")
+    dialogSuffix()
+  } else{
+    Rcmdr:::addObservationStatistics()
+  }
+}
