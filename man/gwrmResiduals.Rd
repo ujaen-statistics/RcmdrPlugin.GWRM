@@ -2,16 +2,21 @@
 % Please edit documentation in R/RcmdrPlugin.GWRM.r
 \name{gwrmResiduals}
 \alias{gwrmResiduals}
-\title{Generalized Waring Regression Model Residuals
-Using the selected gw model show a window asking for the residuals function parameters}
+\title{Simulated envelope of residuals in a generalized Waring regression model
+}
 \usage{
 gwrmResiduals()
 }
-\value{
-Residuals plot
-}
 \description{
-Generalized Waring Regression Model Residuals
-Using the selected gw model show a window asking for the residuals function parameters
+Rcmdr menu for plotting a simulated envelope of residuals in the selected generalized Waring regression model.
+}
+\details{
+In the first box you can enter the number of replications for the envelope construction (default is 19). Next, select the type of residuals to be extracted ("pearson", "deviance" or "response").
+}
+\author{
+Antonio Jose Saez-Castillo, Maria Jose Olmo-Jimenez and Silverio Vilchez-Lopez.
+}
+\seealso{
+residuals.gw, gw
 }
 

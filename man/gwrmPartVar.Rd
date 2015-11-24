@@ -2,16 +2,21 @@
 % Please edit documentation in R/RcmdrPlugin.GWRM.r
 \name{gwrmPartVar}
 \alias{gwrmPartVar}
-\title{Generalized Waring Regression Model Partition Varianze
-Using the selected gw model show a window asking for de Partition Varianze values}
+\title{Partition of the variance in the generalized Waring regression model
+}
 \usage{
 gwrmPartVar()
 }
-\value{
-Partition Varianze of the model
-}
 \description{
-Generalized Waring Regression Model Partition Varianze
-Using the selected gw model show a window asking for de Partition Varianze values
+Rcmdr menu for the partition of the variance in the selected generalized Waring regression model.
+}
+\details{
+If desired you can enter new data to obtain the partition of the variance in the selected gw model.
+}
+\author{
+Antonio Jose Saez-Castillo, Maria Jose Olmo-Jimenez and Silverio Vilchez-Lopez.
+}
+\seealso{
+partvar, gw
 }
 
