@@ -1,6 +1,6 @@
 # Rcmdr menus for the GWRM package
 # When the plug-in is loaded, these menus are merged with the standard Rcmdr menus
-
+#kk
 # last modified: 29 July 2015 by Silverio Vilchez
 #remove   modelsMenu      ""         "Confidence intervals..." "" ""  ""
 remove  confidenceIntervals    ""		""										""							""				""
