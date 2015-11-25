@@ -180,7 +180,18 @@ activeModelGW<- function(){
   if (is.null(ActiveModel())){
     return (FALSE)
   }else{
-    return (class(get(activeModel(), envir = .GlobalEnv))[1] == "gw")
+    if(class(get(activeModel(), envir = .GlobalEnv))[1] == "gw"){
+         #Disabled some menus when activeModel is gw
+         menus=Rcmdr:::getRcmdr("Menus")
+         modelsMenus=menus[mapply(function(a){names(a$position)}=="modelsMenu",menus)]
+         .Tcl(paste(modelsMenus[[1]]$ID," entryconfigure 8 -state disabled",sep=""))
+         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 0 -state disabled",sep=""))
+         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 1 -state disabled",sep=""))
+         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 2 -state disabled",sep=""))
+      return (TRUE)
+    }else{
+      return (FALSE)  
+    }
   }
 }
 
@@ -414,7 +425,7 @@ gwrmResiduals<-function(){
       ", newdata=gwrmNewData"
     else ""
     typeText<-paste(", type=\"", selectionType,"\"", sep = "")
-    command <- paste("residuals(",ActiveModel(),typeText , newdata,repeatsEnvelope,")", sep = "")
+    command <- paste("residuals(",ActiveModel(),typeText , newdata,", envelope=TRUE",repeatsEnvelope,")", sep = "")
     doItAndPrint(command)
     on.exit(setIdleCursor())
     tkfocus(CommanderWindow())
@@ -431,8 +442,17 @@ gwrmResiduals<-function(){
   dialogSuffix()
 }
 
-addObservationStatistics <- function () 
+#'Add observationStatisticsGWRM
+#'Using gw model active add observations data
+#'
+#' @return Residuals plot
+#' 
+#' @importFrom Rcmdr variableListBox
+#' 
+#' @export
+gwrmAddObservationStatistics <- function () 
 {
+  #Is the same as Rcommader with a bug solved.
   .activeDataSet <- ActiveDataSet()
   .activeModel <- ActiveModel()
   if (is.null(.activeModel)) 
@@ -460,12 +480,6 @@ addObservationStatistics <- function ()
     initializeDialog(title = gettextRcmdr("Add Observation Statistics to Data"))
     .variables <- Variables()
     obsNumberExists <- is.element("obsNumber", .variables)
-#     activate <- c(checkMethod("fitted", .activeModel, default = TRUE, 
-#                               reportError = FALSE), checkMethod("residuals", .activeModel, 
-#                                                                 default = TRUE, reportError = FALSE), checkMethod("rstudent", 
-#                                                                                                                   .activeModel, reportError = FALSE), checkMethod("hatvalues", 
-#                                                                                                                                                                   .activeModel, reportError = FALSE), checkMethod("cooks.distance", 
-#                                                                                                                                                                                                                   .activeModel, reportError = FALSE))
     checkBoxes(frame = "selectFrame", boxes = c("fitted", "residuals", "obsNumbers"), 
                labels = gettextRcmdr("Fitted values", "Residuals", "Observation indices"), 
                initialValues = c(dialog.values$initial.fitted, dialog.values$initial.residuals, dialog.values$initial.obsNumbers))
