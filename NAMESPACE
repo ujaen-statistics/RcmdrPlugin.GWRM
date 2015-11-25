@@ -3,6 +3,7 @@
 export(activeModelGW)
 export(extractNewData)
 export(generalizedWaringModel)
+export(gwrmAddObservationStatistics)
 export(gwrmPartVar)
 export(gwrmResiduals)
 export(listGeneralizedWaringModels)
