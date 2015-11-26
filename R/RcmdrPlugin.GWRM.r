@@ -183,7 +183,7 @@ activeModelGW<- function(){
   }else{
     if(class(get(activeModel(), envir = .GlobalEnv))[1] == "gw"){
          #Disabled some menus when activeModel is gw
-         menus=Rcmdr:::getRcmdr("Menus")
+         menus=getRcmdr("Menus")
          modelsMenus=menus[mapply(function(a){names(a$position)}=="modelsMenu",menus)]
          .Tcl(paste(modelsMenus[[1]]$ID," entryconfigure 8 -state disabled",sep=""))
          .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 0 -state disabled",sep=""))
