@@ -1,8 +1,8 @@
 Package: RcmdrPlugin.GWRM
 Type: Package
-Title: Rcmdr for the GWRM package
+Title: Rcmdr Extension for Gw Models.
 Version: 1.0.1
-Date: 2015-07-29
+Date: 2015-11-27
 Authors@R: c(
     person("Antonio Jose", "Saez-Castillo", role = c("aut", "cre"), email = "ajsaez@ujaen.es"),
     person("Silverio", "Vilchez-Lopez", role = "aut", email = "silverio.vilchez@gmail.com"),
@@ -14,7 +14,7 @@ Maintainer: Antonio Jose Saez-Castillo <ajsaez@ujaen.es>
 Depends: R (>= 3.0.0), GWRM (>= 2.0.0), RcmdrMisc (>= 1.0-2)
 Imports: Rcmdr (>= 2.0-0)
 Description: This package provides an Rcmdr "plug-in" based on the
-        GWRM package.
+        GWRM package extend Rcmdr to Models:gw .
 License: GPL (>= 2)
 LazyData: true
 NeedsCompilation: no
@@ -26,4 +26,4 @@ Author: Antonio Jose Saez-Castillo [aut, cre],
   Antonio Conde-Sanchez [aut],
   Ana Maria Martinez-Rodriguez [aut]
 Repository: CRAN
-Packaged: 2015-07-29 06:06:52
+Packaged: 2015-11-27 06:06:52

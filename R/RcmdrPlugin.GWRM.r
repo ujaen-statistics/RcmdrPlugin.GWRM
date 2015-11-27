@@ -176,7 +176,17 @@ resetGW<- function ()
   generalizedWaringModel()
 }
 
+#'Active model GW
+#'Return TRUE or FALSE if the current model is GW, in addition
+#'disabled some menu entry that are incompatibles with de gw model.
+#'
+#' @return TRUE or FALSE
+#' 
+#' @importFrom Rcmdr ActiveModel getRcmdr .Tcl
+#' @import GWRM RcmdrMisc
+#' 
 #' @export
+
 activeModelGW<- function(){
   if (is.null(ActiveModel())){
     return (FALSE)
@@ -446,9 +456,9 @@ gwrmResiduals<-function(){
 #'Add observationStatisticsGWRM
 #'Using gw model active add observations data
 #'
-#' @return Residuals plot
+#' @return nothing
 #' 
-#' @importFrom Rcmdr variableListBox
+#' @importFrom Rcmdr Message Variables checkBoxes ActiveDataSet activeDataSet ActiveModel
 #' 
 #' @export
 gwrmAddObservationStatistics <- function () 
