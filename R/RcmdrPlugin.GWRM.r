@@ -137,6 +137,13 @@ generalizedWaringModel<-function ()
     activeModel(modelValue)
     tkfocus(CommanderWindow())
   }
+  resetGW<- function () 
+  {
+    putRcmdr("reset.model", TRUE)
+    putDialog("generalizedWaringModel", NULL)
+    putDialog("generalizedWaringModel", NULL, resettable = FALSE)
+    generalizedWaringModel()
+  }
   OKCancelHelp(helpSubject = "generalizedWaringModel", model = TRUE, 
                reset = "resetGW", apply = "generalizedWaringModel")
   helpButton <- buttonRcmdr(buttonsFrame, text = "Help", width = "12", 
@@ -157,7 +164,13 @@ generalizedWaringModel<-function ()
   dialogSuffix(focus = lhsEntry, preventDoubleClick = TRUE)
 }
 
-#' @export
+#'Show the list with the current gw models
+#' 
+#' @param envir the environments inside search.
+#' @param ...	further arguments.
+#' 
+#' @return a a list with de current gw models
+#' 
 listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...) 
 {
   objects <- ls(envir = envir, ...)
@@ -167,14 +180,20 @@ listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...)
                                                                envir = envir))[1]))]
 }
 
-#' @export
-resetGW<- function () 
-{
-  putRcmdr("reset.model", TRUE)
-  putDialog("generalizedWaringModel", NULL)
-  putDialog("generalizedWaringModel", NULL, resettable = FALSE)
-  generalizedWaringModel()
-}
+# #'Show the list with the current gw models
+# #' 
+# #' @param envir the environments inside search.
+# #' @param ...	further arguments.
+# #' 
+# #' @return a a list with de current gw models
+# #' 
+# resetGW<- function () 
+# {
+#   putRcmdr("reset.model", TRUE)
+#   putDialog("generalizedWaringModel", NULL)
+#   putDialog("generalizedWaringModel", NULL, resettable = FALSE)
+#   generalizedWaringModel()
+# }
 
 #'Active model GW
 #'Return TRUE or FALSE if the current model is GW, in addition
@@ -455,79 +474,186 @@ gwrmResiduals<-function(){
 
 #'Add observationStatisticsGWRM
 #'Using gw model active add observations data
+#'The same Rcmdr function with a bug solved
 #'
 #' @return nothing
 #' 
 #' @importFrom Rcmdr Message Variables checkBoxes ActiveDataSet activeDataSet ActiveModel
 #' 
 #' @export
-gwrmAddObservationStatistics <- function () 
+
+gwrmAddObservationStatistics <-function () 
 {
-  #Is the same as Rcommader with a bug solved.
   .activeDataSet <- ActiveDataSet()
   .activeModel <- ActiveModel()
   if (is.null(.activeModel)) 
     return()
-  
-  if (activeModelGW()){
-    addVariable <- function(name) {
-      variable <- paste(name, ".", .activeModel, sep = "")
-      if (is.element(variable, .variables)) {
-        ans <- checkReplace(variable)
-        if (tclvalue(ans) == "no") 
-          return()
-      }
-      paste(variable, " <- ", name, "(", .activeModel, ")", 
-            sep = "")
+  addVariable <- function(name) {
+    variable <- paste(name, ".", .activeModel, sep = "")
+    if (is.element(variable, .variables)) {
+      ans <- checkReplace(variable)
+      if (tclvalue(ans) == "no") 
+        return()
     }
-    if (getRcmdr("modelWithSubset")) {
-      Message(message = gettextRcmdr("Observation statistics not available\nfor a model fit to a subset of the data."), 
-              type = "error")
-      tkfocus(CommanderWindow())
-      return()
-    }
-    defaults <- list(initial.fitted = 1, initial.residuals = 1, initial.obsNumbers = 1)
-    dialog.values <- getDialog("addObservationStatistics", defaults)
-    initializeDialog(title = gettextRcmdr("Add Observation Statistics to Data"))
-    .variables <- Variables()
-    obsNumberExists <- is.element("obsNumber", .variables)
-    checkBoxes(frame = "selectFrame", boxes = c("fitted", "residuals", "obsNumbers"), 
-               labels = gettextRcmdr("Fitted values", "Residuals", "Observation indices"), 
-               initialValues = c(dialog.values$initial.fitted, dialog.values$initial.residuals, dialog.values$initial.obsNumbers))
-    command <- paste(.activeDataSet, "<- within(", .activeDataSet, ", {", sep = "")
-    onOK <- function() {
-      closeDialog()
-      if (tclvalue(fittedVariable) == 1) 
-        command <- paste(command, "\n  ", addVariable("fitted"), 
-                         sep = "")
-      if (tclvalue(residualsVariable) == 1) 
-        command <- paste(command, "\n  ", addVariable("residuals"), 
-                         sep = "")
-      obsNumbers <- tclvalue(obsNumbersVariable)
-      putDialog("addObservationStatistics", list(initial.fitted = tclvalue(fittedVariable), 
-                                                 initial.residuals = tclvalue(residualsVariable), 
-                                                 initial.obsNumbers = obsNumbers))
-      if (tclvalue(obsNumbersVariable) == 1) {
-        proceed <- if (obsNumberExists) 
-          tclvalue(checkReplace("obsNumber"))
-        else "yes"
-        if (proceed == "yes") {
-          command <- paste(command, "\n  obsNumber <- 1:nrow(", 
-                           .activeDataSet, ")", sep = "")
-        }
-      }
-      command <- paste(command, "\n})")
-      result <- doItAndPrint(command)
-      if (class(result) != "try-error") 
-        activeDataSet(.activeDataSet, flushModel = FALSE, 
-                      flushDialogMemory = FALSE)
-      tkfocus(CommanderWindow())
-    }
-    OKCancelHelp(helpSubject = "influence.measures", reset = "addObservationStatistics")
-    tkgrid(selectFrame, sticky = "w")
-    tkgrid(buttonsFrame, sticky = "w")
-    dialogSuffix()
-  } else{
-    Rcmdr:::addObservationStatistics()
+    paste(variable, " <- ", name, "(", .activeModel, ")", 
+          sep = "")
   }
+  if (getRcmdr("modelWithSubset")) {
+    Message(message = gettextRcmdr("Observation statistics not available\nfor a model fit to a subset of the data."), 
+            type = "error")
+    tkfocus(CommanderWindow())
+    return()
+  }
+  defaults <- list(initial.fitted = 1, initial.residuals = 1, 
+                   initial.rstudent = 1, initial.hatvalues = 1, initial.cookd = 1, 
+                   initial.obsNumbers = 1)
+  dialog.values <- getDialog("addObservationStatistics", defaults)
+  initializeDialog(title = gettextRcmdr("Add Observation Statistics to Data"))
+  .variables <- Variables()
+  obsNumberExists <- is.element("obsNumber", .variables)
+  activate <- c(checkMethod("fitted", .activeModel, default = TRUE, 
+                            reportError = FALSE), checkMethod("residuals", .activeModel, 
+                                                              default = TRUE, reportError = FALSE), checkMethod("rstudent", 
+                                                                                                                .activeModel, reportError = FALSE), checkMethod("hatvalues", 
+                                                                                                                                                                .activeModel, reportError = FALSE), checkMethod("cooks.distance", 
+                                                                                                                                                                                                                .activeModel, reportError = FALSE))
+  checkBoxes(frame = "selectFrame", boxes = c(c("fitted", "residuals", 
+                                                "rstudent", "hatvalues", "cookd")[activate], "obsNumbers"), 
+             labels = c(gettextRcmdr(c("Fitted values", "Residuals", 
+                                       "Studentized residuals", "Hat-values", "Cook's distances"))[activate], 
+                        gettextRcmdr("Observation indices")), initialValues = c(dialog.values$initial.fitted, 
+                                                                                dialog.values$initial.residuals, dialog.values$initial.rstudent, 
+                                                                                dialog.values$initial.hatvalues, dialog.values$initial.cookd, 
+                                                                                dialog.values$initial.obsNumbers))
+  command <- paste(.activeDataSet, "<- within(", .activeDataSet, 
+                   ", {", sep = "")
+  onOK <- function() {
+    closeDialog()
+    initials <- list(initial.fitted = tclvalue(fittedVariable), 
+                   initial.residuals = tclvalue(residualsVariable))
+    if (activate[1] && tclvalue(fittedVariable) == 1) 
+      command <- paste(command, "\n  ", addVariable("fitted"), 
+                       sep = "")
+    if (activate[2] && tclvalue(residualsVariable) == 1) 
+      command <- paste(command, "\n  ", addVariable("residuals"), 
+                       sep = "")
+    if (activate[3] && tclvalue(rstudentVariable) == 1){ 
+      command <- paste(command, "\n  ", addVariable("rstudent"), 
+                       sep = "")
+      initials<-c(initials,initial.rstudent = tclvalue(rstudentVariable))
+    }
+    if (activate[4] && tclvalue(hatvaluesVariable) == 1){ 
+      command <- paste(command, "\n  ", addVariable("hatvalues"), 
+                       sep = "")
+      initials<-c(initials,initial.hatvalues = tclvalue(hatvaluesVariable))
+    }
+    if (activate[5] && tclvalue(cookdVariable) == 1){ 
+      command <- paste(command, "\n  ", addVariable("cooks.distance"), 
+                       sep = "")
+      initials<-c(initials,initial.cookd = tclvalue(cookdVariable))
+    }
+    obsNumbers <- tclvalue(obsNumbersVariable)
+    initials<-c(initials,initial.obsNumbers = obsNumbers)
+    putDialog("addObservationStatistics", initials)
+    if (tclvalue(obsNumbersVariable) == 1) {
+      proceed <- if (obsNumberExists) 
+        tclvalue(checkReplace("obsNumber"))
+      else "yes"
+      if (proceed == "yes") {
+        command <- paste(command, "\n  obsNumber <- 1:nrow(", 
+                         .activeDataSet, ")", sep = "")
+      }
+    }
+    command <- paste(command, "\n})")
+    result <- doItAndPrint(command)
+    if (class(result) != "try-error") 
+      activeDataSet(.activeDataSet, flushModel = FALSE, 
+                    flushDialogMemory = FALSE)
+    tkfocus(CommanderWindow())
+  }
+  OKCancelHelp(helpSubject = "influence.measures", reset = "addObservationStatistics")
+  tkgrid(selectFrame, sticky = "w")
+  tkgrid(buttonsFrame, sticky = "w")
+  dialogSuffix()
 }
+
+
+
+
+
+
+
+
+
+
+
+# gwrmAddObservationStatistics <- function () 
+# {
+#   #Is the same as Rcommader with a bug solved.
+#   .activeDataSet <- ActiveDataSet()
+#   .activeModel <- ActiveModel()
+#   if (is.null(.activeModel)) 
+#     return()
+#   
+#   if (activeModelGW()){
+#     addVariable <- function(name) {
+#       variable <- paste(name, ".", .activeModel, sep = "")
+#       if (is.element(variable, .variables)) {
+#         ans <- checkReplace(variable)
+#         if (tclvalue(ans) == "no") 
+#           return()
+#       }
+#       paste(variable, " <- ", name, "(", .activeModel, ")", 
+#             sep = "")
+#     }
+#     if (getRcmdr("modelWithSubset")) {
+#       Message(message = gettextRcmdr("Observation statistics not available\nfor a model fit to a subset of the data."), 
+#               type = "error")
+#       tkfocus(CommanderWindow())
+#       return()
+#     }
+#     defaults <- list(initial.fitted = 1, initial.residuals = 1, initial.obsNumbers = 1)
+#     dialog.values <- getDialog("addObservationStatistics", defaults)
+#     initializeDialog(title = gettextRcmdr("Add Observation Statistics to Data"))
+#     .variables <- Variables()
+#     obsNumberExists <- is.element("obsNumber", .variables)
+#     checkBoxes(frame = "selectFrame", boxes = c("fitted", "residuals", "obsNumbers"), 
+#                labels = gettextRcmdr("Fitted values", "Residuals", "Observation indices"), 
+#                initialValues = c(dialog.values$initial.fitted, dialog.values$initial.residuals, dialog.values$initial.obsNumbers))
+#     command <- paste(.activeDataSet, "<- within(", .activeDataSet, ", {", sep = "")
+#     onOK <- function() {
+#       closeDialog()
+#       if (tclvalue(fittedVariable) == 1) 
+#         command <- paste(command, "\n  ", addVariable("fitted"), 
+#                          sep = "")
+#       if (tclvalue(residualsVariable) == 1) 
+#         command <- paste(command, "\n  ", addVariable("residuals"), 
+#                          sep = "")
+#       obsNumbers <- tclvalue(obsNumbersVariable)
+#       putDialog("addObservationStatistics", list(initial.fitted = tclvalue(fittedVariable), 
+#                                                  initial.residuals = tclvalue(residualsVariable), 
+#                                                  initial.obsNumbers = obsNumbers))
+#       if (tclvalue(obsNumbersVariable) == 1) {
+#         proceed <- if (obsNumberExists) 
+#           tclvalue(checkReplace("obsNumber"))
+#         else "yes"
+#         if (proceed == "yes") {
+#           command <- paste(command, "\n  obsNumber <- 1:nrow(", 
+#                            .activeDataSet, ")", sep = "")
+#         }
+#       }
+#       command <- paste(command, "\n})")
+#       result <- doItAndPrint(command)
+#       if (class(result) != "try-error") 
+#         activeDataSet(.activeDataSet, flushModel = FALSE, 
+#                       flushDialogMemory = FALSE)
+#       tkfocus(CommanderWindow())
+#     }
+#     OKCancelHelp(helpSubject = "influence.measures", reset = "addObservationStatistics")
+#     tkgrid(selectFrame, sticky = "w")
+#     tkgrid(buttonsFrame, sticky = "w")
+#     dialogSuffix()
+#   } else{
+#     Rcmdr:::addObservationStatistics()
+#   }
+# }
