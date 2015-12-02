@@ -1,6 +1,6 @@
 Package: RcmdrPlugin.GWRM
 Type: Package
-Title: Rcmdr Extension for Gw Models.
+Title: Rcmdr Extension for Gw Models
 Version: 1.0.1
 Date: 2015-11-27
 Authors@R: c(
