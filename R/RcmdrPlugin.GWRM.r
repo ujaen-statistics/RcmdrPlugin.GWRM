@@ -180,37 +180,27 @@ listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...)
                                                                envir = envir))[1]))]
 }
 
-# #'Show the list with the current gw models
-# #' 
-# #' @param envir the environments inside search.
-# #' @param ...	further arguments.
-# #' 
-# #' @return a a list with de current gw models
-# #' 
-# resetGW<- function () 
-# {
-#   putRcmdr("reset.model", TRUE)
-#   putDialog("generalizedWaringModel", NULL)
-#   putDialog("generalizedWaringModel", NULL, resettable = FALSE)
-#   generalizedWaringModel()
-# }
+
 
 #'Active model GW
 #'Return TRUE or FALSE if the current model is GW, in addition
 #'disabled some menu entry that are incompatibles with de gw model.
 #'
-#' @return TRUE or FALSE
 #' 
 #' @importFrom Rcmdr ActiveModel getRcmdr .Tcl
 #' @import GWRM RcmdrMisc
 #' 
+#' @param envir the environments inside search.
+#' @param ...	further arguments.
+#' 
+#' @return TRUE or FALSE
 #' @export
 
-activeModelGW<- function(){
+activeModelGW<- function(envir = .GlobalEnv,...){
   if (is.null(ActiveModel())){
     return (FALSE)
   }else{
-    if(class(get(activeModel(), envir = .GlobalEnv))[1] == "gw"){
+    if(class(get(activeModel(), envir = envir))[1] == "gw"){
          #Disabled some menus when activeModel is gw
          menus=getRcmdr("Menus")
          modelsMenus=menus[mapply(function(a){names(a$position)}=="modelsMenu",menus)]
@@ -225,9 +215,14 @@ activeModelGW<- function(){
   }
 }
 
+#'Show data table for new data partition varianze
+#'Return nothing
+#'
+#' @importFrom Rcmdr ActiveModel getRcmdr .Tcl tkdestroy
+#' @import GWRM RcmdrMisc
+#' @param ...	further arguments.
+#' 
 
-#' @importFrom Rcmdr tkdestroy
-#' @export
 showTable<-function(...){
   tkdestroy(getRcmdr("gwrmNewDataTable"))
   newDataTable<- tkframe(getRcmdr("gwrmNewDataFrame"))
@@ -257,8 +252,15 @@ showTable<-function(...){
   tkgrid(newDataTable, sticky="w")
 }
 
-#' @export
-extractNewData <-function(nrows,ncols,colNames){
+#'Extract dataframe from partition variation new data table
+#'
+#' @importFrom Rcmdr getRcmdr .Tcl
+#' @param nrows the new data number rows
+#' @param colNames	the names of the covariates
+#' 
+#' @return a data.frame
+extractNewData <-function(nrows,colNames){
+  ncols<-length(colNames)
   textCreateNewData<-"data.frame("
   for (col in 1:ncols){
     colName=paste("gwrm_",colNames[col],sep="")
@@ -338,10 +340,9 @@ gwrmPartVar <-function(){
       return()
     }
     nrows <- as.numeric(tclvalue(rowsValue))
-    ncols<-length(colNames)
     newData<-NULL
     if(ncols>0 && nrows>0){
-      newData<-extractNewData(nrows,ncols,colNames)
+      newData<-extractNewData(nrows,colNames)
       putRcmdr("gwrmNewData",newData)
       doItAndPrint("gwrmNewData<-getRcmdr('gwrmNewData')")
       doItAndPrint("gwrmNewData")
@@ -429,10 +430,9 @@ gwrmResiduals<-function(){
       return()
     }
     nrows <- as.numeric(tclvalue(rowsValue))
-    ncols<-length(colNames)
     newData<-NULL
     if(ncols>0 && nrows>0){
-      newData<-extractNewData(nrows,ncols,colNames)
+      newData<-extractNewData(nrows,colNames)
       putRcmdr("gwrmNewData",newData)
       doItAndPrint("gwrmNewData<-getRcmdr('gwrmNewData')")
       doItAndPrint("gwrmNewData")
@@ -478,7 +478,7 @@ gwrmResiduals<-function(){
 #'
 #' @return nothing
 #' 
-#' @importFrom Rcmdr Message Variables checkBoxes ActiveDataSet activeDataSet ActiveModel
+#' @importFrom Rcmdr Message Variables checkBoxes ActiveDataSet activeDataSet ActiveModel checkMethod
 #' 
 #' @export
 
@@ -517,6 +517,8 @@ gwrmAddObservationStatistics <-function ()
                                                                                                                 .activeModel, reportError = FALSE), checkMethod("hatvalues", 
                                                                                                                                                                 .activeModel, reportError = FALSE), checkMethod("cooks.distance", 
                                                                                                                                                                                                                 .activeModel, reportError = FALSE))
+  fittedVariable<-residualsVariable<-rstudentVariable<-hatvaluesVariable<-cookdVariable<-obsNumbersVariable<-selectFrame<-NULL 
+
   checkBoxes(frame = "selectFrame", boxes = c(c("fitted", "residuals", 
                                                 "rstudent", "hatvalues", "cookd")[activate], "obsNumbers"), 
              labels = c(gettextRcmdr(c("Fitted values", "Residuals", 
@@ -656,4 +658,20 @@ gwrmAddObservationStatistics <-function ()
 #   } else{
 #     Rcmdr:::addObservationStatistics()
 #   }
+# }
+
+
+# #'Show the list with the current gw models
+# #' 
+# #' @param envir the environments inside search.
+# #' @param ...	further arguments.
+# #' 
+# #' @return a a list with de current gw models
+# #' 
+# resetGW<- function () 
+# {
+#   putRcmdr("reset.model", TRUE)
+#   putDialog("generalizedWaringModel", NULL)
+#   putDialog("generalizedWaringModel", NULL, resettable = FALSE)
+#   generalizedWaringModel()
 # }
