@@ -474,7 +474,7 @@ gwrmResiduals<-function(){
 
 #'Add observationStatisticsGWRM
 #'Using gw model active add observations data
-#'The same Rcmdr function with a bug solved
+#'The same Rcmdr function with two bug solved
 #'
 #' @return nothing
 #' 
@@ -562,8 +562,9 @@ gwrmAddObservationStatistics <-function ()
         tclvalue(checkReplace("obsNumber"))
       else "yes"
       if (proceed == "yes") {
-        command <- paste(command, "\n  obsNumber <- 1:nrow(", 
-                         .activeDataSet, ")", sep = "")
+        nRowObs <- nrow(get(.activeDataSet))
+        command <- paste(command, "\n  obsNumber <- 1:", 
+                         nRowObs, sep = "")
       }
     }
     command <- paste(command, "\n})")
