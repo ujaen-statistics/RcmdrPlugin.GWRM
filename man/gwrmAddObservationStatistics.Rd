@@ -3,15 +3,17 @@
 \name{gwrmAddObservationStatistics}
 \alias{gwrmAddObservationStatistics}
 \title{Add observationStatisticsGWRM
-Using gw model active add observations data}
+Using gw model active add observations data
+The same Rcmdr function with two bug solved}
 \usage{
 gwrmAddObservationStatistics()
 }
 \value{
-Residuals plot
+nothing
 }
 \description{
 Add observationStatisticsGWRM
 Using gw model active add observations data
+The same Rcmdr function with two bug solved
 }
 
