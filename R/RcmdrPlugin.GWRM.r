@@ -134,10 +134,7 @@ generalizedWaringModel<-function ()
                      ")", sep = "")
     doItAndPrint(paste(modelValue, " <- ", command, sep = ""))
     doItAndPrint(paste("summary(", modelValue, ")", sep = ""))
-    if (!get(modelValue)$converged)
-      eval(parse(text=(paste("remove(",modelValue,")",sep=""))),envir = .GlobalEnv)
-    else
-       activeModel(modelValue)
+    activeModel(modelValue)
     tkfocus(CommanderWindow())
   }
   resetGW<- function () 
