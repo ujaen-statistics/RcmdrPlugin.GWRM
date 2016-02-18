@@ -1,29 +1,23 @@
 Package: RcmdrPlugin.GWRM
 Type: Package
-Title: Rcmdr Extension for Gw Models
+Title: R Commander Plug-In for Fitting Generalized Waring Regression Models
 Version: 1.0.1
-Date: 2015-11-27
+Date: 2016-02-18
 Authors@R: c(
-    person("Antonio Jose", "Saez-Castillo", role = c("aut", "cre"), email = "ajsaez@ujaen.es"),
-    person("Silverio", "Vilchez-Lopez", role = "aut", email = "silverio.vilchez@gmail.com"),
-    person("Maria Jose", "Olmo-Jimenez", role = "aut", email = "mjolmo@ujaen.es"),
-    person("Jose", "Rodriguez-Avi", role = "aut", email = "jravi@ujaen.es"),
-    person("Antonio", "Conde-Sanchez", role = "aut", email = "aconde@ujaen.es"),
-    person("Ana Maria", "Martinez-Rodriguez", role = "aut", email = "ammartin@ujaen.es"))
-Maintainer: Antonio Jose Saez-Castillo <ajsaez@ujaen.es>
-Depends: R (>= 3.0.0), GWRM (>= 2.0.0), RcmdrMisc (>= 1.0-2)
+    person("Silverio", "Vilchez-Lopez", role = c("aut", "cre"), email = "silverio.vilchez@gmail.com"),
+    person("Antonio Jose", "Saez-Castillo", role = "aut", email = "ajsaez@ujaen.es"),
+    person("Maria Jose", "Olmo-Jimenez", role = "aut", email = "mjolmo@ujaen.es"))
+Maintainer: Silverio Vilchez-Lopez <silverio.vilchez@gmail.com>
+Depends: R (>= 3.0.0), GWRM (>= 2.1.0.1), RcmdrMisc (>= 1.0-2)
 Imports: Rcmdr (>= 2.0-0)
 Description: This package provides an Rcmdr "plug-in" based on the
-        GWRM package extend Rcmdr to Models:gw .
+        GWRM package
 License: GPL (>= 2)
 LazyData: true
 NeedsCompilation: no
-Packaged: 2015-07-29 06:06:52 UTC; UJA
-Author: Antonio Jose Saez-Castillo [aut, cre],
-  Silverio Vilchez-Lopez [aut],
-  Maria Jose Olmo-Jimenez [aut],
-  Jose Rodriguez-Avi [aut],
-  Antonio Conde-Sanchez [aut],
-  Ana Maria Martinez-Rodriguez [aut]
+Packaged: 2016-02-18 17:22:52 UTC; UJA
+Author: Silverio Vilchez-Lopez [aut, cre],
+  Antonio Jose Saez-Castillo [aut],
+  Maria Jose Olmo-Jimenez [aut]
 Repository: CRAN
-Packaged: 2015-11-27 06:06:52
+Packaged: 2016-02-18 17:22:52

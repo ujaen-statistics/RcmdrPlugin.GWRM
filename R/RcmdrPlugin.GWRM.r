@@ -1,3 +1,11 @@
+#' GWRM Plug-In Utility Functions
+#'
+#' @name RcmdrPlugin.Utility
+NULL
+#> NULL
+
+
+
 #Hook function .onAttach is called when attach package.
 #' @importFrom Rcmdr putRcmdr getRcmdr closeCommander Commander
 .onAttach <- function(libname, pkgname){
@@ -21,16 +29,21 @@
 }
 
 
-#'Generalized Waring Regression Model
-#'Using the selected data show a window asking for the GWRM parameters
+#'Rcmdr Generalized Waring Regression Model Dialog
 #'
-#' @return a new model in the model list
+#'This dialog is used to specify a generalized Waring regression model to be fit by the \code{gw} function
+#'
+#'It shares a common general structure with that of the Linear Model (see \code{\link{linearModel}}). Therefore, the use of this dialog box is similar 
+#'to the linear model except the box labelled \code{Model parameters}, in which a fixed value for 
+#'the parameter \code{k} can be specificied; if it is not supplied, the \code{k} estimate is computed.
+#'
+#' @return It returns a new \code{GW} model in the model list.
 #' 
 #' @importFrom Rcmdr gettextRcmdr getDialog initializeDialog ActiveModel formulaFields ActiveDataSet modelFormula UpdateModelNumber tclVar tkframe ttkentry subsetBox variableComboBox Numeric tclvalue errorCondition gettextRcmdr trim.blanks is.valid.name checkReplace UpdateModelNumber closeDialog getSelection putDialog ActiveDataSet doItAndPrint activeModel tkfocus CommanderWindow OKCancelHelp buttonRcmdr tkgrid labelRcmdr getFrame tklabel dialogSuffix
 #' @import GWRM RcmdrMisc
 #' 
 #' @export
-
+#' 
 generalizedWaringModel<-function () 
 {
   if (! ("gw" %in% getRcmdr("modelClasses")))
@@ -164,101 +177,9 @@ generalizedWaringModel<-function ()
   dialogSuffix(focus = lhsEntry, preventDoubleClick = TRUE)
 }
 
-#'Show the list with the current gw models
-#' 
-#' @param envir the environments inside search.
-#' @param ...	further arguments.
-#' 
-#' @return a a list with de current gw models
-#' 
-listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...) 
-{
-  objects <- ls(envir = envir, ...)
-  if (length(objects) == 0) 
-    NULL
-  else objects[sapply(objects, function(.x) "gw" == (class(get(.x, 
-                                                               envir = envir))[1]))]
-}
-
-
-
-#'Active model GW
-#'Return TRUE or FALSE if the current model is GW, in addition
-#'disabled some menu entry that are incompatibles with de gw model.
-#'
-#' 
-#' @importFrom Rcmdr ActiveModel getRcmdr .Tcl
-#' @import GWRM RcmdrMisc
-#' 
-#' @param envir the environments inside search.
-#' @param ...	further arguments.
-#' 
-#' @return TRUE or FALSE
-#' @export
-
-activeModelGW<- function(envir = .GlobalEnv,...){
-  if (is.null(ActiveModel())){
-    return (FALSE)
-  }else{
-    if(class(get(activeModel(), envir = envir))[1] == "gw"){
-         #Disabled some menus when activeModel is gw
-         menus=getRcmdr("Menus")
-         modelsMenus=menus[mapply(function(a){names(a$position)}=="modelsMenu",menus)]
-         .Tcl(paste(modelsMenus[[1]]$ID," entryconfigure 8 -state disabled",sep=""))
-         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 0 -state disabled",sep=""))
-         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 1 -state disabled",sep=""))
-         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 2 -state disabled",sep=""))
-      return (TRUE)
-    }else{
-      return (FALSE)  
-    }
-  }
-}
-
-#'Show data table for new data partition varianze
-#'Return nothing
-#'
-#' @importFrom Rcmdr ActiveModel getRcmdr .Tcl tkdestroy
-#' @import GWRM RcmdrMisc
-#' @param ...	further arguments.
-#' 
-
-showTable<-function(...){
-  tkdestroy(getRcmdr("gwrmNewDataTable"))
-  newDataTable<- tkframe(getRcmdr("gwrmNewDataFrame"))
-  nrows <- as.numeric(tclvalue(getRcmdr("gwrmRowsValue")))
-  colNames<-getRcmdr("gwrmColNames")
-  ncols<-length(colNames)
-  putRcmdr("gwrmNewDataTable",newDataTable)
-  header<-"tklabel(newDataTable, text='')"
-  for (col in seq(length.out=ncols)) {
-    putRcmdr(colNames[col],c())
-    header <- paste(header, ", ", "tklabel(newDataTable, width='12', text=\'", 
-                    colNames[col], "\')", sep="")
-  }
-  if (ncols > 0) {
-    eval(parse(text=paste("tkgrid(", header, ")", sep="")))
-    for (row in seq(length.out=nrows)) { 
-      rowSource <- paste("tklabel(newDataTable, width='6', text=\'",
-                         row, "\')", sep="")
-      for (col in 1:ncols){
-        varName=paste("gwrm_",colNames[col],"_",row,"_",col,sep="")
-        putRcmdr(varName,tclVar(""))
-        rowSource <- paste(rowSource, ", ", "tkentry(newDataTable, width='12',background='#ffffff', textvariable=getRcmdr(\'",varName,"\'))", sep="")
-      }      
-      eval(parse(text=paste("tkgrid(", rowSource, ")", sep="")))
-    }
-  }
-  tkgrid(newDataTable, sticky="w")
-}
-
-#'Extract dataframe from partition variation new data table
-#'
+#' @rdname RcmdrPlugin.Utility
 #' @importFrom Rcmdr getRcmdr .Tcl
-#' @param nrows the new data number rows
-#' @param colNames	the names of the covariates
-#' 
-#' @return a data.frame
+
 extractNewData <-function(nrows,colNames){
   ncols<-length(colNames)
   textCreateNewData<-"data.frame("
@@ -290,14 +211,90 @@ extractNewData <-function(nrows,colNames){
   return (newData)
 }
 
-#'Generalized Waring Regression Model Partition Varianze
-#'Using the selected gw model show a window asking for de Partition Varianze values 
-#'
-#' @return Partition Varianze of the model
+
+#' @rdname RcmdrPlugin.Utility
+#' @param envir the environments inside search.
+#' @param nrows the new data number rows
+#' @param colNames	the names of the covariates
+#' @param ...  further arguments.
+#' 
+listGeneralizedWaringModels<-function (envir = .GlobalEnv, ...) 
+{
+  objects <- ls(envir = envir, ...)
+  if (length(objects) == 0) 
+    NULL
+  else objects[sapply(objects, function(.x) "gw" == (class(get(.x, 
+                                                               envir = envir))[1]))]
+}
+
+
+
+#' @rdname RcmdrPlugin.Utility
+#' @importFrom Rcmdr ActiveModel getRcmdr .Tcl
+#' @import GWRM RcmdrMisc
+#' @export
+
+activeModelGW<- function(envir = .GlobalEnv,...){
+  if (is.null(ActiveModel())){
+    return (FALSE)
+  }else{
+    if(class(get(activeModel(), envir = envir))[1] == "gw"){
+         #Disabled some menus when activeModel is gw
+         menus=getRcmdr("Menus")
+         modelsMenus=menus[mapply(function(a){names(a$position)}=="modelsMenu",menus)]
+         .Tcl(paste(modelsMenus[[1]]$ID," entryconfigure 8 -state disabled",sep=""))
+         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 0 -state disabled",sep=""))
+         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 1 -state disabled",sep=""))
+         .Tcl(paste(modelsMenus[[1]]$ID,".1"," entryconfigure 2 -state disabled",sep=""))
+      return (TRUE)
+    }else{
+      return (FALSE)  
+    }
+  }
+}
+
+#' @rdname RcmdrPlugin.Utility
+#' @importFrom Rcmdr ActiveModel getRcmdr .Tcl tkdestroy
+#' @import GWRM RcmdrMisc
+#' 
+
+showTable<-function(...){
+  tkdestroy(getRcmdr("gwrmNewDataTable"))
+  newDataTable<- tkframe(getRcmdr("gwrmNewDataFrame"))
+  nrows <- as.numeric(tclvalue(getRcmdr("gwrmRowsValue")))
+  colNames<-getRcmdr("gwrmColNames")
+  ncols<-length(colNames)
+  putRcmdr("gwrmNewDataTable",newDataTable)
+  header<-"tklabel(newDataTable, text='')"
+  for (col in seq(length.out=ncols)) {
+    putRcmdr(colNames[col],c())
+    header <- paste(header, ", ", "tklabel(newDataTable, width='12', text=\'", 
+                    colNames[col], "\')", sep="")
+  }
+  if (ncols > 0) {
+    eval(parse(text=paste("tkgrid(", header, ")", sep="")))
+    for (row in seq(length.out=nrows)) { 
+      rowSource <- paste("tklabel(newDataTable, width='6', text=\'",
+                         row, "\')", sep="")
+      for (col in 1:ncols){
+        varName=paste("gwrm_",colNames[col],"_",row,"_",col,sep="")
+        putRcmdr(varName,tclVar(""))
+        rowSource <- paste(rowSource, ", ", "tkentry(newDataTable, width='12',background='#ffffff', textvariable=getRcmdr(\'",varName,"\'))", sep="")
+      }      
+      eval(parse(text=paste("tkgrid(", rowSource, ")", sep="")))
+    }
+  }
+  tkgrid(newDataTable, sticky="w")
+}
+
+
+#' @rdname RcmdrPlugin.Utility
+# @return Partition of variance of the \code{GW} model (see \code{\link{partvar}}).
 #' 
 #' @importFrom Rcmdr tkframe tkscale
 #' 
 #' @export
+
 gwrmPartVar <-function(){
   
   initializeDialog(title=gettextRcmdr("Variance Partition"))
@@ -367,14 +364,12 @@ gwrmPartVar <-function(){
   dialogSuffix()
 }
 
-#'Generalized Waring Regression Model Residuals
-#'Using the selected gw model show a window asking for the residuals function parameters
-#'
-#' @return Residuals plot
+#' @rdname RcmdrPlugin.Utility
 #' 
 #' @importFrom Rcmdr variableListBox
 #' 
 #' @export
+
 gwrmResiduals<-function(){
   
   typeSets <- c("pearson","deviance","response")
@@ -407,18 +402,6 @@ gwrmResiduals<-function(){
   colNames <- if (is.null(ActiveModel())) NULL else all.vars(delete.response(terms(get(ActiveModel()))))
   putRcmdr("gwrmColNames",colNames)
   ncols<-length(colNames)
-  
-#   newDataTable<- tkframe(newDataFrame)
-#   putRcmdr("gwrmNewDataTable",newDataTable)
-#   header<-"tklabel(newDataTable, text='')"
-#   for (col in seq(length.out=ncols)) {
-#     putRcmdr(colNames[col],c())
-#     header <- paste(header, ", ", "tklabel(newDataTable, width='12', text=\'", 
-#                     colNames[col], "\')", sep="")
-#   }   
-#   
-#   tkgrid(newDataTable, sticky="w")
-#   tkgrid(newDataFrame, sticky="w")
   
   onOK <- function(){
     if (is.null(ActiveModel())) {
@@ -472,11 +455,7 @@ gwrmResiduals<-function(){
   dialogSuffix()
 }
 
-#'Add observationStatisticsGWRM
-#'Using gw model active add observations data
-#'The same Rcmdr function with two bug solved
-#'
-#' @return nothing
+#' @rdname RcmdrPlugin.Utility
 #' 
 #' @importFrom Rcmdr Message Variables checkBoxes ActiveDataSet activeDataSet ActiveModel checkMethod
 #' 

@@ -2,16 +2,19 @@
 % Please edit documentation in R/RcmdrPlugin.GWRM.r
 \name{generalizedWaringModel}
 \alias{generalizedWaringModel}
-\title{Generalized Waring Regression Model
-Using the selected data show a window asking for the GWRM parameters}
+\title{Rcmdr Generalized Waring Regression Model Dialog}
 \usage{
 generalizedWaringModel()
 }
 \value{
-a new model in the model list
+It returns a new \code{GW} model in the model list.
 }
 \description{
-Generalized Waring Regression Model
-Using the selected data show a window asking for the GWRM parameters
+This dialog is used to specify a generalized Waring regression model to be fit by the \code{gw} function
+}
+\details{
+It shares a common general structure with that of the Linear Model (see \code{\link{linearModel}}). Therefore, the use of this dialog box is similar
+to the linear model except the box labelled \code{Model parameters}, in which a fixed value for
+the parameter \code{k} can be specificied; if it is not supplied, the \code{k} estimate is computed.
 }
 
