@@ -8,16 +8,19 @@ Authors@R: c(
     person("Antonio Jose", "Saez-Castillo", role = "aut", email = "ajsaez@ujaen.es"),
     person("Maria Jose", "Olmo-Jimenez", role = "aut", email = "mjolmo@ujaen.es"))
 Maintainer: Silverio Vilchez-Lopez <silverio.vilchez@gmail.com>
-Depends: R (>= 3.0.0), GWRM (>= 2.1.0.1), RcmdrMisc (>= 1.0-2)
-Imports: Rcmdr (>= 2.0-0)
-Description: This package provides an Rcmdr plug-in based on the
-        GWRM package
+Depends:
+    R (>= 3.0.0),
+    GWRM (>= 2.1.0.1),
+    RcmdrMisc (>= 1.0-2)
+Imports:
+    Rcmdr (>= 2.0-0)
+Description: Provides an Rcmdr "plug-in" based on the GWRM package.
 License: GPL (>= 2)
 LazyData: true
 NeedsCompilation: no
-Packaged: 2016-02-18 17:22:52 UTC; UJA
-Author: Silverio Vilchez-Lopez [aut, cre],
-  Antonio Jose Saez-Castillo [aut],
-  Maria Jose Olmo-Jimenez [aut]
-Repository: CRAN
 Packaged: 2016-02-18 17:22:52
+Author: Silverio Vilchez-Lopez [aut, cre],
+    Antonio Jose Saez-Castillo [aut],
+    Maria Jose Olmo-Jimenez [aut]
+Repository: CRAN
+RoxygenNote: 5.0.1

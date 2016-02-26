@@ -179,6 +179,7 @@ generalizedWaringModel<-function ()
 
 #' @rdname RcmdrPlugin.Utility
 #' @importFrom Rcmdr getRcmdr .Tcl
+#' @importFrom stats na.omit terms delete.response model.frame .checkMFClasses
 
 extractNewData <-function(nrows,colNames){
   ncols<-length(colNames)
@@ -292,6 +293,7 @@ showTable<-function(...){
 # @return Partition of variance of the \code{GW} model (see \code{\link{partvar}}).
 #' 
 #' @importFrom Rcmdr tkframe tkscale
+#' #' @importFrom stats na.omit terms delete.response model.frame .checkMFClasses
 #' 
 #' @export
 
