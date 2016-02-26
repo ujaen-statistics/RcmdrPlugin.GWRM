@@ -1,6 +1,6 @@
 Package: RcmdrPlugin.GWRM
 Type: Package
-Title: R Commander Plug-In for Fitting Generalized Waring Regression Models
+Title: R Commander Plug-in for Fitting Generalized Waring Regression Models
 Version: 1.0.1
 Date: 2016-02-18
 Authors@R: c(
