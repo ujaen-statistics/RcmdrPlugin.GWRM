@@ -32,12 +32,11 @@ License: GPL (>= 2)
 \note{
 Some functions cannot run adequately if there are missing data.
 }
+\seealso{
+\code{\link{Rcmdr}}
+}
 \author{
 Silverio Vilchez-Lopez, Antonio Jose Saez-Castillo and Maria Jose
 Olmo-Jimenez.
 Maintainer: Silverio Vilchez-Lopez
 }
-\seealso{
-\code{\link{Rcmdr}}
-}
-

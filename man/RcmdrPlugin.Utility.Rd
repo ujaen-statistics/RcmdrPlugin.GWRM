@@ -2,13 +2,13 @@
 % Please edit documentation in R/RcmdrPlugin.GWRM.r
 \name{RcmdrPlugin.Utility}
 \alias{RcmdrPlugin.Utility}
-\alias{activeModelGW}
 \alias{extractNewData}
-\alias{gwrmAddObservationStatistics}
+\alias{listGeneralizedWaringModels}
+\alias{activeModelGW}
+\alias{showTable}
 \alias{gwrmPartVar}
 \alias{gwrmResiduals}
-\alias{listGeneralizedWaringModels}
-\alias{showTable}
+\alias{gwrmAddObservationStatistics}
 \title{GWRM Plug-In Utility Functions}
 \usage{
 extractNewData(nrows, colNames)
@@ -37,4 +37,3 @@ gwrmAddObservationStatistics()
 \description{
 GWRM Plug-In Utility Functions
 }
-

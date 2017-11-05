@@ -17,4 +17,3 @@ It shares a common general structure with that of the Linear Model (see \code{\l
 to the linear model except the box labelled \code{Model parameters}, in which a fixed value for 
 the parameter \code{k} can be specificied; if it is not supplied, the \code{k} estimate is computed.
 }
-
