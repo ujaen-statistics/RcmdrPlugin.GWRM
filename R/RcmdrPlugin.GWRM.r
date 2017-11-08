@@ -42,6 +42,9 @@ NULL
 #' @importFrom Rcmdr gettextRcmdr getDialog initializeDialog ActiveModel formulaFields ActiveDataSet modelFormula UpdateModelNumber tclVar tkframe ttkentry subsetBox variableComboBox Numeric tclvalue errorCondition gettextRcmdr trim.blanks is.valid.name checkReplace UpdateModelNumber closeDialog getSelection putDialog ActiveDataSet doItAndPrint activeModel tkfocus CommanderWindow OKCancelHelp buttonRcmdr tkgrid labelRcmdr getFrame tklabel dialogSuffix
 #' @import GWRM RcmdrMisc
 #' 
+#' @examples
+#' library(RcmdrPlugin.GWRM)
+#' 
 #' @export
 #' 
 generalizedWaringModel<-function () 
